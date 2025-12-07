@@ -54,4 +54,24 @@ impl CharMatrix {
             row.get_mut(p.1 as usize).map(|cc: &mut char| *cc = c);
         });
     }
+
+    pub fn transpose(self, empty: char) -> CharMatrix {
+        let v = &self.0;
+        let res = (0..v.iter().map(|l| l.len()).max().unwrap_or(0))
+            .map(|i| v.iter().map(|vi| vi.get(i).unwrap_or(&empty).clone()).collect())
+            .collect();
+        CharMatrix(res)
+    }
+
+    pub fn unwrap(self) -> Vec<Vec<char>> {
+        self.0
+    }
+
+    pub fn map_view(&self) -> impl Iterator<Item = (V2, char)> {
+        self.0.iter().enumerate()
+            .flat_map(|(i, vi)| {
+                vi.iter().enumerate()
+                    .map(move |(j, c)| ((i as i32, j as i32), *c))
+        })
+    }
 }
